@@ -226,6 +226,20 @@ message BidRequest {
     // Array of exchange-specific names of supported iframe busters.
     repeated string iframebuster = 10;
 
+    // Indicates whether the user receives a reward for viewing the ad, where 0
+    // = no, 1 = yes. Typically video ad implementations allow users to read an
+    // additional news article for free, receive an extra life in a game, or get
+    // a sponsored ad-free music session. The reward is typically distributed
+    // after the video ad is completed.
+    optional bool rwwd = 18 [default = false];
+
+    // Indicates if server-side ad insertion (e.g., stitching an ad into an
+    // audio or video stream) is in use and the impact of this on asset and
+    // tracker retrieval, where 0 = status unknown, 1 = all client-side (i.e.,
+    // not server-side), 2 = assets stitched server-side but tracking pixels
+    // fired client-side, 3 = all server-side.
+    optional int32 ssai = 19 [default = 0];
+
     // A Pmp object (Section 3.2.17) containing any private marketplace deals
     // in effect for this impression.
     optional Pmp pmp = 11;
