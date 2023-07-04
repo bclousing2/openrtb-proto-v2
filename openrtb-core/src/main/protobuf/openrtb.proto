@@ -123,6 +123,12 @@ message BidRequest {
   // Content objects if available.
   repeated string wlang = 18;
 
+  // Allowed list of languages for creatives using IETF BCP 47I. Omission
+  // implies no specific restrictions, but buyers would be advised to consider
+  // language attribute in the Device and/or Content objects if available. Only
+  // one of wlang or wlangb should be present.
+  repeated string wlangb = 20;
+
   // A Source object (Section 3.2.2) that provides data about the
   // inventory source and which entity makes the final decision.
   optional Source source = 19;
@@ -984,9 +990,19 @@ message BidRequest {
     // Content language using ISO-639-1-alpha-2.
     optional string language = 19;
 
+    // Content language using IETF BCP 47.
+    // Only one of language or langb should be present.
+    optional string langb = 29;
+
     // Additional content data. Each Data object represents a different
     // data source.
     repeated Data data = 26;
+
+    // Details about the network the content is on.
+    optional Network network = 30;
+
+    // Details about the channel the content is on.
+    optional Channel channel = 31;
 
     // Extensions.
     extensions 100 to 9999;
@@ -1009,6 +1025,54 @@ message BidRequest {
 
     // Highest level domain of the content producer (e.g., "producer.com").
     optional string domain = 4;
+
+    // Extensions.
+    extensions 100 to 9999;
+  }
+
+  // This object describes the network an ad will be displayed on. A Network is
+  // defined as the parent entity of the Channel object’s entity for the
+  // purposes of organizing Channels. Examples are companies that own and/or
+  // license a collection of content channels (Viacom, Discovery, CBS,
+  // WarnerMedia, Turner and others), or studio that creates such content and
+  // self-distributes content. Name is a human-readable field while domain and
+  // id can be used for reporting and targeting purposes.
+  message Network {
+    // A unique identifier assigned by the publisher. This may not be a unique
+    // identifier across all supply sources.
+    optional string id = 1;
+
+    // Network the content is on (e.g., a TV network like "ABC").
+    optional string name = 2;
+
+    // The primary domain of the network (e.g. "abc.com" in the case of the
+    // network ABC). It is recommended to include the top private domain (PSL+1)
+    // for DSP targeting normalization purposes.
+    optional string domain = 3;
+
+    // Extensions.
+    extensions 100 to 9999;
+  }
+
+  // This object describes the channel an ad will be displayed on. A Channel is
+  // defined as the entity that curates a content library, or stream within a
+  // a brand name for viewers. Examples are specific view selectable ‘channels’
+  // within linear and streaming television (MTV, HGTV, CNN, BBC One, etc) or a
+  // specific stream of audio content commonly called ‘stations.’ Name is a
+  // human-readable field while domain and id can be used for reporting and
+  // targeting purposes.
+  message Channel {
+    // A unique identifier assigned by the publisher. This may not be a unique
+    // identifier across all supply sources.
+    optional string id = 1;
+
+    // Channel the content is on (e.g., a TV channel like "WABC-TV").
+    optional string name = 2;
+
+    // The primary domain of the channel (e.g. "abc7ny.com" in the case of the
+    // local channel WABC-TV). It is recommended to include the top private
+    // domain (PSL+1) for DSP targeting normalization purposes.
+    optional string domain = 3;
 
     // Extensions.
     extensions 100 to 9999;
@@ -1058,6 +1122,9 @@ message BidRequest {
 
     // Browser language using ISO-639-1-alpha-2.
     optional string language = 11;
+
+    // Browser language using IETF BCP 47. Only one of language or langb should be present.
+    optional string langb = 32;
 
     // Device make (e.g., "Apple").
     optional string make = 12;
@@ -1576,6 +1643,10 @@ message BidResponse {
       // code "xx" may also be used if the creative has no
       // linguistic content (e.g., a banner with just a company logo).
       optional string language = 25;
+
+      // Language of the creative using IETF BCP 47. Only one of language or
+      // langb should be present.
+      optional string langb = 29;
 
       // Relative width of the creative when expressing size as a ratio.
       // Required for Flex Ads.
