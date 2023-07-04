@@ -96,6 +96,10 @@ message BidRequest {
   // Blocked advertiser categories using the IAB content categories.
   repeated string bcat = 12;
 
+  // The taxonomy in use for bcat.
+  // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+  optional int32 cattax = 21 [default = 1];
+
   // Block list of advertisers by their domains (e.g., "ford.com").
   repeated string badv = 13;
 
@@ -758,6 +762,10 @@ message BidRequest {
     // For example, "foo.com".
     optional string domain = 3;
 
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 16 [default = 1];
+
     // Array of IAB content categories of the site.
     repeated string cat = 4;
 
@@ -820,6 +828,10 @@ message BidRequest {
     // Domain of the application. For example, "mygame.foo.com".
     optional string domain = 3;
 
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 17 [default = 1];
+
     // Array of IAB content categories of the app.
     repeated string cat = 4;
 
@@ -872,6 +884,10 @@ message BidRequest {
 
     // Publisher name (may be aliased at publisher's request).
     optional string name = 2;
+
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 5 [default = 1];
 
     // Array of IAB content categories that describe the publisher.
     repeated string cat = 3;
@@ -928,6 +944,10 @@ message BidRequest {
 
     // URL of the content, for buy-side contextualization or review.
     optional string url = 6;
+
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 27 [default = 1];
 
     // Array of IAB content categories that describe the content.
     repeated string cat = 7;
@@ -1003,6 +1023,10 @@ message BidRequest {
 
     // Content producer or originator name (e.g., "Warner Bros").
     optional string name = 2;
+
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 5 [default = 1];
 
     // Array of IAB content categories that describe the content producer.
     repeated string cat = 3;
@@ -1518,6 +1542,10 @@ message BidResponse {
 
       // Creative ID to assist with ad quality checking.
       optional string crid = 10;
+
+      // The taxonomy in use.
+      // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+      optional int32 cattax = 30 [default = 1];
 
       // IAB content categories of the creative.
       repeated string cat = 15;
