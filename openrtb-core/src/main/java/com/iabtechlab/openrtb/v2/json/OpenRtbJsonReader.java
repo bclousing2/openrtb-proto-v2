@@ -34,6 +34,7 @@ import com.iabtechlab.openrtb.v2.Gender;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.App;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.BrandVersion;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Channel;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Content;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data.Segment;
@@ -49,6 +50,7 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Pmp;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Pmp.Deal;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Video;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Video.CompanionAd;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Network;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Producer;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Publisher;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Regs;
@@ -201,6 +203,11 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
       case "wlang":
         for (startArray(par); endArray(par); par.nextToken()) {
           req.addWlang(par.getText());
+        }
+        break;
+      case "wlangb":
+        for (startArray(par); endArray(par); par.nextToken()) {
+          req.addWlangb(par.getText());
         }
         break;
       case "source":
@@ -1070,6 +1077,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
       case "language":
         content.setLanguage(par.getText());
         break;
+      case "langb":
+        content.setLangb(par.getText());
+        break;
       case "embeddable":
         content.setEmbeddable(par.getValueAsBoolean());
         break;
@@ -1093,8 +1103,68 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
           content.addData(readData(par));
         }
         break;
+      case "network":
+        content.setNetwork(readNetwork(par));
+        break;
+      case "channel":
+        content.setChannel(readChannel(par));
+        break;
       default:
         readOther(content, par, fieldName);
+    }
+  }
+
+  public final Channel.Builder readChannel(JsonParser par) throws IOException {
+    Channel.Builder network = Channel.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readChannelField(par, network, fieldName);
+      }
+    }
+    return network;
+  }
+
+  protected void readChannelField(JsonParser par, Channel.Builder channel, String fieldName) throws IOException {
+    switch (fieldName) {
+      case "id":
+        channel.setId(par.getText());
+        break;
+      case "name":
+        channel.setName(par.getText());
+        break;
+      case "domain":
+        channel.setDomain(par.getText());
+        break;
+      default:
+        readOther(channel, par, fieldName);
+    }
+  }
+
+  public final Network.Builder readNetwork(JsonParser par) throws IOException {
+    Network.Builder network = Network.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readNetworkField(par, network, fieldName);
+      }
+    }
+    return network;
+  }
+
+  protected void readNetworkField(JsonParser par, Network.Builder network, String fieldName) throws IOException {
+    switch (fieldName) {
+      case "id":
+        network.setId(par.getText());
+        break;
+      case "name":
+        network.setName(par.getText());
+        break;
+      case "domain":
+        network.setDomain(par.getText());
+        break;
+      default:
+        readOther(network, par, fieldName);
     }
   }
 
@@ -1240,6 +1310,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "language":
         device.setLanguage(par.getText());
+        break;
+      case "langb":
+        device.setLangb(par.getText());
         break;
       case "carrier":
         device.setCarrier(par.getText());
@@ -1731,6 +1804,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "language":
         bid.setLanguage(par.getText());
+        break;
+      case "langb":
+        bid.setLangb(par.getText());
         break;
       case "wratio":
         bid.setWratio(par.getIntValue());
