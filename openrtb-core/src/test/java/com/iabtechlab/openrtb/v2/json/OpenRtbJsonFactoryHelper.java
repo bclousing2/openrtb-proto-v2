@@ -36,7 +36,11 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Publisher;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Regs;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Site;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source.SupplyChain;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source.SupplyChain.SupplyChainNode;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User.EID;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User.EID.UID;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.UserAgent;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidResponse;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidResponse.SeatBid;
@@ -102,7 +106,11 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test1Reader<>(TestExt.testRegs), Regs.Builder.class)
         .register(new Test1Reader<>(TestExt.testSite), Site.Builder.class)
         .register(new Test1Reader<>(TestExt.testSource), Source.Builder.class)
+        .register(new Test1Reader<>(TestExt.testSupplyChain), SupplyChain.Builder.class)
+        .register(new Test1Reader<>(TestExt.testSupplyChainNode), SupplyChainNode.Builder.class)
         .register(new Test1Reader<>(TestExt.testUser), User.Builder.class)
+        .register(new Test1Reader<>(TestExt.testEID), EID.Builder.class)
+        .register(new Test1Reader<>(TestExt.testUID), UID.Builder.class)
         .register(new Test1Reader<>(TestExt.testData), Data.Builder.class)
         .register(new Test1Reader<>(TestExt.testSegment), Data.Segment.Builder.class)
         .register(new Test1Reader<>(TestExt.testBrandVersion), BrandVersion.Builder.class)
@@ -115,6 +123,8 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test1Writer(), Test1.class, Device.class)
         .register(new Test1Writer(), Test1.class, Site.class)
         .register(new Test1Writer(), Test1.class, User.class)
+        .register(new Test1Writer(), Test1.class, EID.class)
+        .register(new Test1Writer(), Test1.class, UID.class)
         .register(new Test1Writer(), Test1.class, Geo.class)
         .register(new Test1Writer(), Test1.class, Data.class)
         .register(new Test1Writer(), Test1.class, Data.Segment.class)
@@ -133,6 +143,8 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test1Writer(), Test1.class, Pmp.Deal.class)
         .register(new Test1Writer(), Test1.class, Regs.class)
         .register(new Test1Writer(), Test1.class, Source.class)
+        .register(new Test1Writer(), Test1.class, SupplyChain.class)
+        .register(new Test1Writer(), Test1.class, SupplyChainNode.class)
         .register(new Test1Writer(), Test1.class, BrandVersion.class)
         .register(new Test1Writer(), Test1.class, UserAgent.class)
         .register(new OpenRtbRegsExtJsonWriter(), OpenRtbExt.RegsExt.class, OpenRtb.BidRequest.Regs.class);

@@ -66,7 +66,12 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Producer;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Publisher;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Regs;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Site;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source.SupplyChain;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source.SupplyChain.SupplyChainNode;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User.EID;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User.EID.UID;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.UserAgent;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidResponse;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidResponse.SeatBid;
@@ -169,7 +174,14 @@ public class OpenRtbJsonTest {
         .setSite(Site.newBuilder()
             .setContent(Content.newBuilder())
             .setPublisher(Publisher.newBuilder()))
-            .setUser(User.newBuilder().addData(Data.newBuilder().addSegment(Segment.newBuilder())))
+        .setUser(User.newBuilder()
+            .addData(Data.newBuilder()
+                .addSegment(Segment.newBuilder()))
+            .addEids(EID.newBuilder()
+                .addUids(UID.newBuilder())))
+        .setSource(Source.newBuilder()
+            .setSchain(SupplyChain.newBuilder()
+                .addNodes(SupplyChainNode.newBuilder())))
         .build());
     testRequest(jsonFactory, BidRequest.newBuilder().setId("0")
         .setSite(Site.newBuilder()
@@ -630,7 +642,7 @@ public class OpenRtbJsonTest {
                 .setMinbitrate(1000)
                 .setMaxbitrate(2000)
                 .addDelivery(DeliveryMethod.STREAMING.getNumber())
-                .addCompanionad(OpenRtb.BidRequest.Imp.Banner.newBuilder()
+                .addCompanionad(Banner.newBuilder()
                     .setId("compad1")
                     .setW(100)
                     .setH(50))
@@ -733,6 +745,13 @@ public class OpenRtbJsonTest {
                     .setExtension(TestExt.testSegment, test1))
                 .setExtension(TestExt.testData, test1))
             .setConsent("consent")
+            .addEids(EID.newBuilder()
+                .setSource("source")
+                .addUids(UID.newBuilder()
+                    .setId("id")
+                    .setAtype(12)
+                    .setExtension(TestExt.testUID, test1))
+                .setExtension(TestExt.testEID, test1))
             .setExtension(TestExt.testUser, test1))
         .setAt(AuctionType.SECOND_PRICE_PLUS.getNumber())
         .setTmax(100)
@@ -754,10 +773,22 @@ public class OpenRtbJsonTest {
         .addAllBapp(asList("app1", "app2"))
         .addAllBseat(asList("seat3", "seat4"))
         .addAllWlang(asList("en", "pt"))
-        .setSource(OpenRtb.BidRequest.Source.newBuilder()
+        .setSource(Source.newBuilder()
             .setFd(true)
             .setTid("tid1")
             .setPchain("XYZ01234:ABCD56789")
+            .setSchain(SupplyChain.newBuilder()
+                .setComplete(true)
+                .setVer("1.0")
+                .addNodes(SupplyChainNode.newBuilder()
+                    .setAsi("asi")
+                    .setSid("sid")
+                    .setRid("rid")
+                    .setName("name")
+                    .setDomain("domain")
+                    .setHp(true)
+                    .setExtension(TestExt.testSupplyChainNode, test1))
+                .setExtension(TestExt.testSupplyChain, test1))
             .setExtension(TestExt.testSource, test1))
         .setExtension(TestExt.testRequest2, test2)
         .setExtension(TestExt.testRequest1, test1);
