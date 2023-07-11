@@ -577,7 +577,11 @@ message BidRequest {
 
       // Placement type for the impression.
       // Refer to enum com.iabtechlab.adcom.v1.VideoPlacementSubtype for generic values.
-      optional int32 placement = 26;
+      optional int32 placement = 26 [deprecated = true];
+
+      // Video placement type for the impression.
+      // Refer to enum com.iabtechlab.adcom.v1.VideoPlcmtSubtype for generic values.
+      optional int32 plcmt = 35;
 
       // The event that causes playback to end.
       // Refer to enum com.iabtechlab.adcom.v1.PlaybackCessationMode for generic values.
