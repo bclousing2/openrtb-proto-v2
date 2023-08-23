@@ -231,7 +231,7 @@ message BidRequest {
     // additional news article for free, receive an extra life in a game, or get
     // a sponsored ad-free music session. The reward is typically distributed
     // after the video ad is completed.
-    optional bool rwwd = 18 [default = false];
+    optional bool rwdd = 18 [default = false];
 
     // Indicates if server-side ad insertion (e.g., stitching an ad into an
     // audio or video stream) is in use and the impact of this on asset and
