@@ -32,6 +32,9 @@ extend com.iabtechlab.openrtb.v2.BidRequest.App {
 extend com.iabtechlab.openrtb.v2.BidRequest.BrandVersion {
   optional Test1 testBrandVersion = 110;
 }
+extend com.iabtechlab.openrtb.v2.BidRequest.Channel {
+  optional Test1 testChannel = 110;
+}
 extend com.iabtechlab.openrtb.v2.BidRequest.Content {
   optional Test1 testContent = 110;
 }
@@ -76,6 +79,9 @@ extend com.iabtechlab.openrtb.v2.BidRequest.Imp.Pmp {
 }
 extend com.iabtechlab.openrtb.v2.BidRequest.Imp.Pmp.Deal {
   optional Test1 testDeal = 110;
+}
+extend com.iabtechlab.openrtb.v2.BidRequest.Network {
+  optional Test1 testNetwork = 110;
 }
 extend com.iabtechlab.openrtb.v2.BidRequest.Producer {
   optional Test1 testProducer = 110;

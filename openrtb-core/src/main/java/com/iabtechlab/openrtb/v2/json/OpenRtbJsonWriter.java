@@ -168,6 +168,7 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     writeStrings("bapp", req.getBappList(), gen);
     writeStrings("bseat", req.getBseatList(), gen);
     writeStrings("wlang", req.getWlangList(), gen);
+    writeStrings("wlangb", req.getWlangbList(), gen);
     if (req.hasSource()) {
       gen.writeFieldName("source");
       writeSource(req.getSource(), gen);
@@ -750,6 +751,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     if (content.hasLanguage()) {
       gen.writeStringField("language", content.getLanguage());
     }
+    if (content.hasLangb()) {
+      gen.writeStringField("langb", content.getLangb());
+    }
     if (content.hasEmbeddable()) {
       writeIntBoolField("embeddable", content.getEmbeddable(), gen);
     }
@@ -774,6 +778,52 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
         writeData(data, gen);
       }
       gen.writeEndArray();
+    }
+    if (content.hasNetwork()) {
+      gen.writeFieldName("network");
+      writeNetwork(content.getNetwork(), gen);
+    }
+    if (content.hasChannel()) {
+      gen.writeFieldName("channel");
+      writeChannel(content.getChannel(), gen);
+    }
+  }
+
+  public final void writeChannel(BidRequest.Channel channel, JsonGenerator gen) throws IOException {
+    gen.writeStartObject();
+    writeChannelFields(channel, gen);
+    writeExtensions(channel, gen);
+    gen.writeEndObject();
+  }
+
+  protected void writeChannelFields(BidRequest.Channel channel, JsonGenerator gen) throws IOException {
+    if (channel.hasId()) {
+      gen.writeStringField("id", channel.getId());
+    }
+    if (channel.hasName()) {
+      gen.writeStringField("name", channel.getName());
+    }
+    if (channel.hasDomain()) {
+      gen.writeStringField("domain", channel.getDomain());
+    }
+  }
+
+  public final void writeNetwork(BidRequest.Network network, JsonGenerator gen) throws IOException {
+    gen.writeStartObject();
+    writeNetworkFields(network, gen);
+    writeExtensions(network, gen);
+    gen.writeEndObject();
+  }
+
+  protected void writeNetworkFields(BidRequest.Network network, JsonGenerator gen) throws IOException {
+    if (network.hasId()) {
+      gen.writeStringField("id", network.getId());
+    }
+    if (network.hasName()) {
+      gen.writeStringField("name", network.getName());
+    }
+    if (network.hasDomain()) {
+      gen.writeStringField("domain", network.getDomain());
     }
   }
 
@@ -888,6 +938,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (device.hasLanguage()) {
       gen.writeStringField("language", device.getLanguage());
+    }
+    if (device.hasLangb()) {
+      gen.writeStringField("langb", device.getLangb());
     }
     if (device.hasCarrier()) {
       gen.writeStringField("carrier", device.getCarrier());
@@ -1323,6 +1376,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (bid.hasLanguage()) {
       gen.writeStringField("language", bid.getLanguage());
+    }
+    if (bid.hasLangb()) {
+      gen.writeStringField("langb", bid.getLangb());
     }
     if (bid.hasWratio()) {
       gen.writeNumberField("wratio", bid.getWratio());

@@ -21,6 +21,7 @@ import com.iabtechlab.openrtb.v2.OpenRtb;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.App;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.BrandVersion;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Channel;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Content;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Device;
@@ -31,6 +32,7 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Banner;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Native;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Pmp;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Video;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Network;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Producer;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Publisher;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Regs;
@@ -85,6 +87,8 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test2Reader<>(TestExt.testRequest2, "test2ext"), BidRequest.Builder.class)
         .register(new Test1Reader<>(TestExt.testApp), App.Builder.class)
         .register(new Test1Reader<>(TestExt.testContent), Content.Builder.class)
+        .register(new Test1Reader<>(TestExt.testChannel), Channel.Builder.class)
+        .register(new Test1Reader<>(TestExt.testNetwork), Network.Builder.class)
         .register(new Test1Reader<>(TestExt.testProducer), Producer.Builder.class)
         .register(new Test1Reader<>(TestExt.testPublisher), Publisher.Builder.class)
         .register(new Test1Reader<>(TestExt.testDevice), Device.Builder.class)
@@ -120,6 +124,8 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test1Writer(), Test1.class, Data.Segment.class)
         .register(new Test1Writer(), Test1.class, Publisher.class)
         .register(new Test1Writer(), Test1.class, Content.class)
+        .register(new Test1Writer(), Test1.class, Channel.class)
+        .register(new Test1Writer(), Test1.class, Network.class)
         .register(new Test1Writer(), Test1.class, Producer.class)
         .register(new Test1Writer(), Test1.class, Imp.class)
         .register(new Test1Writer(), Test1.class, Imp.Metric.class)
