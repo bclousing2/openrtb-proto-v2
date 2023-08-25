@@ -157,6 +157,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     writeStrings("cur", req.getCurList(), gen);
     writeContentCategories("bcat", req.getBcatList(), gen);
+    if (req.hasCattax()) {
+      gen.writeNumberField("cattax", req.getCattax());
+    }
     writeStrings("badv", req.getBadvList(), gen);
     if (req.hasRegs()) {
       gen.writeFieldName("regs");
@@ -597,6 +600,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     if (site.hasDomain()) {
       gen.writeStringField("domain", site.getDomain());
     }
+    if (site.hasCattax()) {
+      gen.writeNumberField("cattax", site.getCattax());
+    }
     writeContentCategories("cat", site.getCatList(), gen);
     writeContentCategories("sectioncat", site.getSectioncatList(), gen);
     writeContentCategories("pagecat", site.getPagecatList(), gen);
@@ -647,6 +653,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (app.hasDomain()) {
       gen.writeStringField("domain", app.getDomain());
+    }
+    if (app.hasCattax()) {
+      gen.writeNumberField("cattax", app.getCattax());
     }
     if (app.hasStoreurl()) {
       gen.writeStringField("storeurl", app.getStoreurl());
@@ -706,6 +715,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (content.hasUrl()) {
       gen.writeStringField("url", content.getUrl());
+    }
+    if (content.hasCattax()) {
+      gen.writeNumberField("cattax", content.getCattax());
     }
     writeContentCategories("cat", content.getCatList(), gen);
     if (content.hasVideoquality()) {
@@ -779,6 +791,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     if (producer.hasName()) {
       gen.writeStringField("name", producer.getName());
     }
+    if (producer.hasCattax()) {
+      gen.writeNumberField("cattax", producer.getCattax());
+    }
     writeContentCategories("cat", producer.getCatList(), gen);
     if (producer.hasDomain()) {
       gen.writeStringField("domain", producer.getDomain());
@@ -798,6 +813,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (publisher.hasName()) {
       gen.writeStringField("name", publisher.getName());
+    }
+    if (publisher.hasCattax()) {
+      gen.writeNumberField("cattax", publisher.getCattax());
     }
     writeContentCategories("cat", publisher.getCatList(), gen);
     if (publisher.hasDomain()) {
@@ -1267,6 +1285,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (bid.hasCrid()) {
       gen.writeStringField("crid", bid.getCrid());
+    }
+    if (bid.hasCattax()) {
+      gen.writeNumberField("cattax", bid.getCattax());
     }
     writeContentCategories("cat", bid.getCatList(), gen);
     writeInts("attr", bid.getAttrList(), gen);
