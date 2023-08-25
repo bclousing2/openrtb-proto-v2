@@ -180,6 +180,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
           }
         }
         break;
+      case "cattax":
+        req.setCattax(par.getIntValue());
+        break;
       case "badv":
         for (startArray(par); endArray(par); par.nextToken()) {
           req.addBadv(par.getText());
@@ -862,6 +865,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
       case "domain":
         site.setDomain(par.getText());
         break;
+      case "cattax":
+        site.setCattax(par.getIntValue());
+        break;
       case "cat":
         for (startArray(par); endArray(par); par.nextToken()) {
           String cat = par.getText();
@@ -940,6 +946,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "domain":
         app.setDomain(par.getText());
+        break;
+      case "cattax":
+        app.setCattax(par.getIntValue());
         break;
       case "storeurl":
         app.setStoreurl(par.getText());
@@ -1026,6 +1035,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "url":
         content.setUrl(par.getText());
+        break;
+      case "cattax":
+        content.setCattax(par.getIntValue());
         break;
       case "cat":
         for (startArray(par); endArray(par); par.nextToken()) {
@@ -1118,6 +1130,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
       case "name":
         producer.setName(par.getText());
         break;
+      case "cattax":
+        producer.setCattax(par.getIntValue());
+        break;
       case "cat":
         for (startArray(par); endArray(par); par.nextToken()) {
           String cat = par.getText();
@@ -1153,6 +1168,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "name":
         publisher.setName(par.getText());
+        break;
+      case "cattax":
+        publisher.setCattax(par.getIntValue());
         break;
       case "cat":
         for (startArray(par); endArray(par); par.nextToken()) {
@@ -1685,6 +1703,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "crid":
         bid.setCrid(par.getText());
+        break;
+      case "cattax":
+        bid.setCattax(par.getIntValue());
         break;
       case "cat":
         for (startArray(par); endArray(par); par.nextToken()) {
