@@ -50,6 +50,7 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BannerAdType;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.App;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.BrandVersion;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Channel;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Content;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data.Segment;
@@ -62,6 +63,7 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Metric;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Native;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Pmp;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Video;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Network;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Producer;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Publisher;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Regs;
@@ -173,7 +175,10 @@ public class OpenRtbJsonTest {
         .build());
     testRequest(jsonFactory, BidRequest.newBuilder().setId("0")
         .setSite(Site.newBuilder()
-            .setContent(Content.newBuilder().setProducer(Producer.newBuilder())))
+            .setContent(Content.newBuilder()
+                    .setProducer(Producer.newBuilder())
+                    .setNetwork(Network.newBuilder())
+                    .setChannel(Channel.newBuilder())))
         .build());
   }
 
@@ -684,6 +689,7 @@ public class OpenRtbJsonTest {
             .setJs(true)
             .setFlashver("11")
             .setLanguage("en")
+            .setLangb("enb")
             .setCarrier("77777")
             .setConnectiontype(ConnectionType.CELL_4G.getNumber())
             .setIfa("999")
@@ -754,6 +760,7 @@ public class OpenRtbJsonTest {
         .addAllBapp(asList("app1", "app2"))
         .addAllBseat(asList("seat3", "seat4"))
         .addAllWlang(asList("en", "pt"))
+        .addAllWlangb(asList("enb", "ptb"))
         .setSource(OpenRtb.BidRequest.Source.newBuilder()
             .setFd(true)
             .setTid("tid1")
@@ -808,11 +815,22 @@ public class OpenRtbJsonTest {
             .setQagmediarating(MediaRating.MATURE.getNumber())
             .setEmbeddable(false)
             .setLanguage("en")
+            .setLangb("enb")
             .setArtist("Beethoven")
             .setGenre("Classical")
             .setAlbum("9th")
             .setIsrc("1234")
             .setProdq(ProductionQuality.PROFESSIONAL.getNumber())
+            .setNetwork(Network.newBuilder()
+              .setId("netId")
+              .setName("netName")
+              .setDomain("netDomain")
+              .setExtension(TestExt.testNetwork, test1))
+            .setChannel(Channel.newBuilder()
+              .setId("channelId")
+              .setName("channelName")
+              .setDomain("channelDomain")
+              .setExtension(TestExt.testChannel, test1))
             .setExtension(TestExt.testContent, test1))
         .setKeywords("news,politics")
         .setExtension(TestExt.testSite, test1);
@@ -862,6 +880,7 @@ public class OpenRtbJsonTest {
         .setLurl("http://losing.com/")
         .setTactic("abc")
         .setLanguage("en")
+        .setLanguage("enb")
         .setWratio(100)
         .setHratio(85)
         .setExtension(TestExt.testBid, test1);
