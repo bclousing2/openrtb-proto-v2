@@ -417,7 +417,7 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         qty.setVendor(par.getText());
         break;
       default:
-        readOther(req, par, fieldName);
+        readOther(qty, par, fieldName);
     }
   }
 
@@ -426,25 +426,25 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
     for (startObject(par); endObject(par); par.nextToken()) {
       String fieldName = getCurrentName(par);
       if (par.nextToken() != JsonToken.VALUE_NULL) {
-        readQtyField(par, refresh, fieldName);
+        readRefreshField(par, refresh, fieldName);
       }
     }
     return refresh;
   }
 
-  protected void readRefreshField(JsonParser par, Qty.Builder refresh, String fieldName)
+  protected void readRefreshField(JsonParser par, Refresh.Builder refresh, String fieldName)
       throws IOException {
     switch (fieldName) {
       case "refsettings":
         for (startArray(par); endArray(par); par.nextToken()) {
-          refresh.addRefSettings(readRefSetings(par));
+          refresh.addRefsettings(readRefSettings(par));
         }
         break;
       case "count":
         refresh.setCount(par.getIntValue());
         break;
       default:
-        readOther(req, par, fieldName);
+        readOther(refresh, par, fieldName);
     }
   }
 
@@ -453,13 +453,13 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
     for (startObject(par); endObject(par); par.nextToken()) {
       String fieldName = getCurrentName(par);
       if (par.nextToken() != JsonToken.VALUE_NULL) {
-        readRefSettingsField(par, refreshSetting, fieldName);
+        readRefSettingsField(par, refSettings, fieldName);
       }
     }
     return refSettings;
   }
 
-  protected void readRefSettingsField(JsonParser par, RefSettings.Builder metric, String fieldName)
+  protected void readRefSettingsField(JsonParser par, RefSettings.Builder refSettings, String fieldName)
       throws IOException {
     switch (fieldName) {
       case "reftype":
@@ -469,7 +469,7 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         refSettings.setMinint(par.getIntValue());
         break;
       default:
-        readOther(req, par, fieldName);
+        readOther(refSettings, par, fieldName);
     }
   }
 
@@ -1111,22 +1111,24 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         dooh.setDomain(par.getText());
         break;
       case "venuetype":
-        dooh.setVenuetype(par.getText());
+        for (startArray(par); endArray(par); par.nextToken()) {
+          dooh.addVenuetype(par.getText());
+        }
         break;
       case "venuetypetax":
         dooh.setVenuetypetax(par.getIntValue());
         break;
       case "publisher":
-        app.setPublisher(readPublisher(par));
+        dooh.setPublisher(readPublisher(par));
         break;
       case "content":
-        app.setContent(readContent(par));
+        dooh.setContent(readContent(par));
         break;
       case "keywords":
-        app.setKeywords(readCsvString(par));
+        dooh.setKeywords(readCsvString(par));
         break;
       default:
-        readOther(app, par, fieldName);
+        readOther(dooh, par, fieldName);
     }
   }
 
