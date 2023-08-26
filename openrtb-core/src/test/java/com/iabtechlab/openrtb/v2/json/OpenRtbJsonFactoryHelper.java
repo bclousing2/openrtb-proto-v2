@@ -24,6 +24,7 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.BrandVersion;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Content;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Device;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Dooh;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Geo;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Audio;
@@ -88,9 +89,13 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test1Reader<>(TestExt.testProducer), Producer.Builder.class)
         .register(new Test1Reader<>(TestExt.testPublisher), Publisher.Builder.class)
         .register(new Test1Reader<>(TestExt.testDevice), Device.Builder.class)
+        .register(new Test1Reader<>(TestExt.testDooh), Dooh.Builder.class)
         .register(new Test1Reader<>(TestExt.testGeo), Geo.Builder.class)
         .register(new Test1Reader<>(TestExt.testImp), Imp.Builder.class)
         .register(new Test1Reader<>(TestExt.testMetric), Imp.Metric.Builder.class)
+        .register(new Test1Reader<>(TestExt.testQty), Imp.Qty.Builder.class)
+        .register(new Test1Reader<>(TestExt.testRefresh), Imp.Refresh.Builder.class)
+        .register(new Test1Reader<>(TestExt.testRefSettings), Imp.Refresh.RefSettings.Builder.class)
         .register(new Test1Reader<>(TestExt.testBanner), Banner.Builder.class)
         .register(new Test1Reader<>(TestExt.testFormat), Banner.Format.Builder.class)
         .register(new Test1Reader<>(TestExt.testNative), Native.Builder.class)
@@ -113,6 +118,7 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test2Writer("test2ext"), Test2.class, BidRequest.class)
         .register(new Test1Writer(), Test1.class, App.class)
         .register(new Test1Writer(), Test1.class, Device.class)
+        .register(new Test1Writer(), Test1.class, Dooh.class)
         .register(new Test1Writer(), Test1.class, Site.class)
         .register(new Test1Writer(), Test1.class, User.class)
         .register(new Test1Writer(), Test1.class, Geo.class)
@@ -123,6 +129,9 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test1Writer(), Test1.class, Producer.class)
         .register(new Test1Writer(), Test1.class, Imp.class)
         .register(new Test1Writer(), Test1.class, Imp.Metric.class)
+        .register(new Test1Writer(), Test1.class, Imp.Qty.class)
+        .register(new Test1Writer(), Test1.class, Imp.Refresh.class)
+        .register(new Test1Writer(), Test1.class, Imp.Refresh.RefSettings.class)
         .register(new Test1Writer(), Test1.class, Banner.class)
         .register(new Test1Writer(), Test1.class, Banner.Format.class)
         .register(new Test1Writer(), Test1.class, Video.class)
