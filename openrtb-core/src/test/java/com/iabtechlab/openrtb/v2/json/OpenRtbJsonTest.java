@@ -16,9 +16,7 @@
 
 package com.iabtechlab.openrtb.v2.json;
 
-import static com.google.common.truth.Truth.assertThat;
-import static com.iabtechlab.openrtb.v2.json.OpenRtbJsonFactoryHelper.newJsonFactory;
-import static java.util.Arrays.asList;
+import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -80,10 +78,14 @@ import com.iabtechlab.openrtb.v2.TestExt;
 import com.iabtechlab.openrtb.v2.TestUtil;
 import com.iabtechlab.openrtb.v3.Enums.AuctionType;
 import com.iabtechlab.openrtb.v3.Enums.NoBidReason;
-import java.io.IOException;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.google.common.truth.Truth.assertThat;
+import static com.iabtechlab.openrtb.v2.json.OpenRtbJsonFactoryHelper.newJsonFactory;
+import static java.util.Arrays.asList;
 
 /**
  * Tests for {@link OpenRtbJsonFactory}, {@link OpenRtbJsonReader}, {@link OpenRtbJsonWriter}.
@@ -575,6 +577,8 @@ public class OpenRtbJsonTest {
                 .setValue(1.0)
                 .setVendor("Google")
                 .setExtension(TestExt.testMetric, test1))
+            .setRwdd(true)
+            .setSsai(3)
             .setExtension(TestExt.testImp, test1))
         .addImp(Imp.newBuilder()
             .setId("imp2")
@@ -614,6 +618,14 @@ public class OpenRtbJsonTest {
                 .setSkipafter(10)
                 .setPlacement(VideoPlacementSubtype.IN_FEED.getNumber())
                 .setPlaybackend(PlaybackCessationMode.ON_EXIT_FLOAT.getNumber())
+                .setMaxseq(4)
+                .setPoddur(60)
+                .setPodid("pod_1")
+                .setPodseq(1)
+                .addRqddurs(15)
+                .setSlotinpod(2)
+                .setMincpmpersec(60.0)
+                .setPlcmt(34)
                 .setExtension(TestExt.testVideo, test1)))
         .addImp(Imp.newBuilder()
             .setId("imp3")
@@ -640,6 +652,12 @@ public class OpenRtbJsonTest {
                 .setFeed(FeedType.PODCAST.getNumber())
                 .setStitched(true)
                 .setNvol(VolumeNormalizationMode.LOUDNESS_NORMALIZATION.getNumber())
+                .setPoddur(60)
+                .addRqddurs(15)
+                .setPodid("pod_1")
+                .setPodseq(1)
+                .setSlotinpod(2)
+                .setMincpmpersec(45.0)
                 .setExtension(TestExt.testAudio, OpenRtbJsonFactoryHelper.test1)))
         .addImp(Imp.newBuilder()
             .setId("imp4")
@@ -864,6 +882,10 @@ public class OpenRtbJsonTest {
         .setLanguage("en")
         .setWratio(100)
         .setHratio(85)
+        .addApis(1)
+        .setDur(30)
+        .setMtype(2)
+        .setSlotinpod(1)
         .setExtension(TestExt.testBid, test1);
     if (admNative) {
       bid.setAdmNative(NativeResponse.newBuilder()
