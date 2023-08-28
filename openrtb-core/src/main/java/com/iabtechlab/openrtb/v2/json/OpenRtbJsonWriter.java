@@ -446,6 +446,9 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     if (video.hasMincpmpersec()) {
       gen.writeNumberField("mincpmpersec", video.getMincpmpersec());
     }
+    if (video.hasPlcmt()) {
+      gen.writeNumberField("plcmt", video.getPlcmt());
+    }
   }
 
   public final void writeCompanionAd21(CompanionAd companionad21, JsonGenerator gen)

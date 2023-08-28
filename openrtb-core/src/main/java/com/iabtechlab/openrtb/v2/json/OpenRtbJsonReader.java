@@ -629,6 +629,8 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
       case "mincpmpersec":
         video.setMincpmpersec(par.getValueAsDouble());
         break;
+      case "plcmt":
+        video.setPlcmt(par.getIntValue());
       default:
         readOther(video, par, fieldName);
     }

@@ -16,9 +16,7 @@
 
 package com.iabtechlab.openrtb.v2.json;
 
-import static com.google.common.truth.Truth.assertThat;
-import static com.iabtechlab.openrtb.v2.json.OpenRtbJsonFactoryHelper.newJsonFactory;
-import static java.util.Arrays.asList;
+import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -80,10 +78,14 @@ import com.iabtechlab.openrtb.v2.TestExt;
 import com.iabtechlab.openrtb.v2.TestUtil;
 import com.iabtechlab.openrtb.v3.Enums.AuctionType;
 import com.iabtechlab.openrtb.v3.Enums.NoBidReason;
-import java.io.IOException;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.google.common.truth.Truth.assertThat;
+import static com.iabtechlab.openrtb.v2.json.OpenRtbJsonFactoryHelper.newJsonFactory;
+import static java.util.Arrays.asList;
 
 /**
  * Tests for {@link OpenRtbJsonFactory}, {@link OpenRtbJsonReader}, {@link OpenRtbJsonWriter}.
@@ -623,6 +625,7 @@ public class OpenRtbJsonTest {
                 .addRqddurs(15)
                 .setSlotinpod(2)
                 .setMincpmpersec(60.0)
+                .setPlcmt(34)
                 .setExtension(TestExt.testVideo, test1)))
         .addImp(Imp.newBuilder()
             .setId("imp3")
