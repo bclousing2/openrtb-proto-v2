@@ -252,6 +252,7 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (imp.hasSsai()) {
       gen.writeNumberField("ssai", imp.getSsai());
+    }
     if (imp.hasQty()) {
       gen.writeFieldName("qty");
       writeQty(imp.getQty(), gen);
