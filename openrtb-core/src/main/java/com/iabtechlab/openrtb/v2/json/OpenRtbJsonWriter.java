@@ -30,6 +30,7 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Content;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data.Segment;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Device;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Dooh;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Geo;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Audio;
@@ -39,6 +40,9 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Metric;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Native;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Pmp;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Pmp.Deal;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Qty;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Refresh;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Refresh.RefSettings;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Video;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Video.CompanionAd;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Producer;
@@ -130,6 +134,10 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
       case APP:
         gen.writeFieldName("app");
         writeApp(req.getApp(), gen);
+        break;
+      case DOOH:
+        gen.writeFieldName("dooh");
+        writeDooh(req.getDooh(), gen);
         break;
       case DISTRIBUTIONCHANNELONEOF_NOT_SET:
         checkRequired(false);
@@ -239,6 +247,17 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
       }
       gen.writeEndArray();
     }
+    if (imp.hasQty()) {
+      gen.writeFieldName("qty");
+      writeQty(imp.getQty(), gen);
+    }
+    if (imp.hasDt()) {
+      gen.writeNumberField("dt", imp.getDt());
+    }
+    if (imp.hasRefresh()) {
+      gen.writeFieldName("refresh");
+      writeRefresh(imp.getRefresh(), gen);
+    }
   }
 
   public final void writeMetric(Metric metric, JsonGenerator gen) throws IOException {
@@ -257,6 +276,61 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (metric.hasVendor()) {
       gen.writeStringField("vendor", metric.getVendor());
+    }
+  }
+
+  public final void writeQty(Qty qty, JsonGenerator gen) throws IOException {
+    gen.writeStartObject();
+    writeQtyFields(qty, gen);
+    writeExtensions(qty, gen);
+    gen.writeEndObject();
+  }
+
+  protected void writeQtyFields(Qty qty, JsonGenerator gen) throws IOException {
+    if (qty.hasMultiplier()) {
+      gen.writeNumberField("multiplier", qty.getMultiplier());
+    }
+    if (qty.hasSourcetype()) {
+      gen.writeNumberField("sourcetype", qty.getSourcetype());
+    }
+    if (qty.hasVendor()) {
+      gen.writeStringField("vendor", qty.getVendor());
+    }
+  }
+
+  public final void writeRefresh(Refresh refresh, JsonGenerator gen) throws IOException {
+    gen.writeStartObject();
+    writeRefreshFields(refresh, gen);
+    writeExtensions(refresh, gen);
+    gen.writeEndObject();
+  }
+
+  protected void writeRefreshFields(Refresh refresh, JsonGenerator gen) throws IOException {
+    if (refresh.getRefsettingsCount() != 0) {
+      gen.writeArrayFieldStart("refsettings");
+      for (RefSettings refSettings : refresh.getRefsettingsList()) {
+        writeRefSettings(refSettings, gen);
+      }
+      gen.writeEndArray();
+    }
+    if (refresh.hasCount()) {
+      gen.writeNumberField("count", refresh.getCount());
+    }
+  }
+
+  public final void writeRefSettings(RefSettings refSettings, JsonGenerator gen) throws IOException {
+    gen.writeStartObject();
+    writeRefSettingsFields(refSettings, gen);
+    writeExtensions(refSettings, gen);
+    gen.writeEndObject();
+  }
+
+  protected void writeRefSettingsFields(RefSettings refSettings, JsonGenerator gen) throws IOException {
+    if (refSettings.hasReftype()) {
+      gen.writeNumberField("reftype", refSettings.getReftype());
+    }
+    if (refSettings.hasMinint()) {
+      gen.writeNumberField("minint", refSettings.getMinint());
     }
   }
 
@@ -683,6 +757,40 @@ public class OpenRtbJsonWriter extends AbstractOpenRtbJsonWriter {
     }
     if (app.hasKeywords()) {
       gen.writeStringField("keywords", app.getKeywords());
+    }
+  }
+
+  public final void writeDooh(Dooh dooh, JsonGenerator gen) throws IOException {
+    gen.writeStartObject();
+    writeDoohFields(dooh, gen);
+    writeExtensions(dooh, gen);
+    gen.writeEndObject();
+  }
+
+  protected void writeDoohFields(Dooh dooh, JsonGenerator gen) throws IOException {
+    if (dooh.hasId()) {
+      gen.writeStringField("id", dooh.getId());
+    }
+    if (dooh.hasName()) {
+      gen.writeStringField("name", dooh.getName());
+    }
+    writeStrings("venuetype", dooh.getVenuetypeList(), gen);
+    if (dooh.hasVenuetypetax()) {
+      gen.writeNumberField("venuetypetax", dooh.getVenuetypetax());
+    }
+    if (dooh.hasPublisher()) {
+      gen.writeFieldName("publisher");
+      writePublisher(dooh.getPublisher(), gen);
+    }
+    if (dooh.hasDomain()) {
+      gen.writeStringField("domain", dooh.getDomain());
+    }
+    if (dooh.hasKeywords()) {
+      gen.writeStringField("keywords", dooh.getKeywords());
+    }
+    if (dooh.hasContent()) {
+      gen.writeFieldName("content");
+      writeContent(dooh.getContent(), gen);
     }
   }
 

@@ -38,6 +38,7 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Channel;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Content;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Data.Segment;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Dooh;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Device;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Geo;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp;
@@ -48,6 +49,9 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Metric;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Native;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Pmp;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Pmp.Deal;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Qty;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Refresh;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Refresh.RefSettings;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Video;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Imp.Video.CompanionAd;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Network;
@@ -145,6 +149,9 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "app":
         req.setApp(readApp(par));
+        break;
+      case "dooh":
+        req.setDooh(readDooh(par));
         break;
       case "device":
         req.setDevice(readDevice(par));
@@ -354,6 +361,15 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
           imp.addMetric(readMetric(par));
         }
         break;
+      case "qty":
+        imp.setQty(readQty(par));
+        break;
+      case "dt":
+        imp.setDt(par.getValueAsDouble());
+        break;
+      case "refresh":
+        imp.setRefresh(readRefresh(par));
+        break;
       default:
         readOther(imp, par, fieldName);
     }
@@ -384,6 +400,86 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       default:
         readOther(metric, par, fieldName);
+    }
+  }
+
+  public final Qty.Builder readQty(JsonParser par) throws IOException {
+    Qty.Builder qty = Qty.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readQtyField(par, qty, fieldName);
+      }
+    }
+    return qty;
+  }
+
+  protected void readQtyField(JsonParser par, Qty.Builder qty, String fieldName)
+      throws IOException {
+    switch (fieldName) {
+      case "multiplier":
+        qty.setMultiplier(par.getValueAsDouble());
+        break;
+      case "sourcetype":
+        qty.setSourcetype(par.getIntValue());
+        break;
+      case "vendor":
+        qty.setVendor(par.getText());
+        break;
+      default:
+        readOther(qty, par, fieldName);
+    }
+  }
+
+  public final Refresh.Builder readRefresh(JsonParser par) throws IOException {
+    Refresh.Builder refresh = Refresh.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readRefreshField(par, refresh, fieldName);
+      }
+    }
+    return refresh;
+  }
+
+  protected void readRefreshField(JsonParser par, Refresh.Builder refresh, String fieldName)
+      throws IOException {
+    switch (fieldName) {
+      case "refsettings":
+        for (startArray(par); endArray(par); par.nextToken()) {
+          refresh.addRefsettings(readRefSettings(par));
+        }
+        break;
+      case "count":
+        refresh.setCount(par.getIntValue());
+        break;
+      default:
+        readOther(refresh, par, fieldName);
+    }
+  }
+
+  public final RefSettings.Builder readRefSettings(JsonParser par) throws IOException {
+    RefSettings.Builder refSettings = RefSettings.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readRefSettingsField(par, refSettings, fieldName);
+      }
+    }
+    return refSettings;
+  }
+
+  protected void readRefSettingsField(JsonParser par, RefSettings.Builder refSettings, String fieldName)
+      throws IOException {
+    switch (fieldName) {
+      case "reftype":
+        refSettings.setReftype(par.getIntValue());
+        break;
+      case "minint":
+        refSettings.setMinint(par.getIntValue());
+        break;
+      default:
+        readOther(refSettings, par, fieldName);
     }
   }
 
@@ -1004,6 +1100,51 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       default:
         readOther(app, par, fieldName);
+    }
+  }
+
+  public final Dooh.Builder readDooh(JsonParser par) throws IOException {
+    Dooh.Builder dooh = Dooh.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readDoohField(par, dooh, fieldName);
+      }
+    }
+    return dooh;
+  }
+
+  protected void readDoohField(JsonParser par, Dooh.Builder dooh, String fieldName)
+      throws IOException {
+    switch (fieldName) {
+      case "id":
+        dooh.setId(par.getText());
+        break;
+      case "name":
+        dooh.setName(par.getText());
+        break;
+      case "domain":
+        dooh.setDomain(par.getText());
+        break;
+      case "venuetype":
+        for (startArray(par); endArray(par); par.nextToken()) {
+          dooh.addVenuetype(par.getText());
+        }
+        break;
+      case "venuetypetax":
+        dooh.setVenuetypetax(par.getIntValue());
+        break;
+      case "publisher":
+        dooh.setPublisher(readPublisher(par));
+        break;
+      case "content":
+        dooh.setContent(readContent(par));
+        break;
+      case "keywords":
+        dooh.setKeywords(readCsvString(par));
+        break;
+      default:
+        readOther(dooh, par, fieldName);
     }
   }
 
