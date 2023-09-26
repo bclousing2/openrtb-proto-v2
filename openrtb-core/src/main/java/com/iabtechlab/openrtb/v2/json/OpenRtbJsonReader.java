@@ -366,6 +366,7 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "ssai":
         imp.setSsai(par.getIntValue());
+        break;
       case "qty":
         imp.setQty(readQty(par));
         break;
@@ -736,6 +737,7 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
         break;
       case "plcmt":
         video.setPlcmt(par.getIntValue());
+        break;
       default:
         readOther(video, par, fieldName);
     }
