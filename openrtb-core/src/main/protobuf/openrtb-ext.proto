@@ -243,6 +243,19 @@ message SKAdNetworkRequest {
 message ImpExt {
   // Publisher's SKAdNetwork information.
   optional SKAdNetworkRequest skadn = 1;
+
+  // To differentiate between impression opportunities
+  // that support Protected Audience API on-device auction from
+  // those that only support traditional server-side exchange auction
+  enum Ae {
+    // Traditional server-side auctions
+    TRADITIONAL = 0;
+    // Requests with Protected Audience API support,
+    // in which a contextual auction runs on the exchange's servers
+    // and the interest group bidding and the final auction runs in the browser
+    FLEDGE = 1;
+  }
+  optional int32 ae = 2;
 }
 
 extend com.iabtechlab.openrtb.v2.BidRequest.Imp {
