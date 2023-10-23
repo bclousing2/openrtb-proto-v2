@@ -265,6 +265,9 @@ message DeviceExt {
   // IDFV of the device in that publisher. Listed as ifv to match ifa field
   // format.
   optional string ifv = 2;
+
+  // Third party cookies deprecation label. The label as received from Chrome or an upstream partner
+  optional string cdep = 3;
 }
 
 extend com.iabtechlab.openrtb.v2.BidRequest.Device {
