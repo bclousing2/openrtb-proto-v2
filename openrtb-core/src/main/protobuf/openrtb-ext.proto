@@ -247,15 +247,15 @@ message ImpExt {
   // To differentiate between impression opportunities
   // that support Protected Audience API on-device auction from
   // those that only support traditional server-side exchange auction
-  enum Ae {
+  enum AuctionEnvironment {
     // Traditional server-side auctions
-    TRADITIONAL = 0;
+    SERVER_SIDE_AUCTION = 0;
     // Requests with Protected Audience API support,
     // in which a contextual auction runs on the exchange's servers
     // and the interest group bidding and the final auction runs in the browser
-    FLEDGE = 1;
+    ON_DEVICE_INTEREST_GROUP_AUCTION = 1;
   }
-  optional int32 ae = 2;
+  optional AuctionEnvironment ae = 2 [default = SERVER_SIDE_AUCTION];
 }
 
 extend com.iabtechlab.openrtb.v2.BidRequest.Imp {

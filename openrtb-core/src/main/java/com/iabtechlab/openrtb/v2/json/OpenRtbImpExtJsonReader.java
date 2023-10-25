@@ -15,9 +15,11 @@ public class OpenRtbImpExtJsonReader extends OpenRtbJsonExtComplexReader<OpenRtb
         super(OpenRtbExt.imp, false, AE);
     }
 
+    @Override
     protected void read(OpenRtbExt.ImpExt.Builder builder, JsonParser par) throws IOException {
         if (OpenRtbJsonUtils.getCurrentName(par).equals(AE)) {
-            builder.setAe(par.nextIntValue(0));
+            int aeNumberValue = par.nextIntValue(0);
+            builder.setAe(OpenRtbExt.ImpExt.AuctionEnvironment.forNumber(aeNumberValue));
         }
     }
 }
