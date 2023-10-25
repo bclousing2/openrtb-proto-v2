@@ -712,6 +712,7 @@ public class OpenRtbJsonTest {
                 .addApi(APIFramework.MRAID_1_0.getNumber())
                 .addBattr(Attribute.TEXT_ONLY.getNumber())
                 .setExtension(TestExt.testNative, test1))
+            .setExtension(TestExt.testImp, test1)
             .setExtension(OpenRtbExt.imp,
                           ImpExt.newBuilder().setAe(ImpExt.AuctionEnvironment.ON_DEVICE_INTEREST_GROUP_AUCTION).build()))
         .setDevice(Device.newBuilder()
