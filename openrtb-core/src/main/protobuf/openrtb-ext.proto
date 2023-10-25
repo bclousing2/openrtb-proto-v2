@@ -255,7 +255,7 @@ message ImpExt {
     // and the interest group bidding and the final auction runs in the browser
     ON_DEVICE_INTEREST_GROUP_AUCTION = 1;
   }
-  optional AuctionEnvironment ae = 2 [default = SERVER_SIDE_AUCTION];
+  optional int32 ae = 2;
 }
 
 extend com.iabtechlab.openrtb.v2.BidRequest.Imp {

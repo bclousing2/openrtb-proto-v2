@@ -11,7 +11,7 @@ public class OpenRtbImpExtJsonWriter extends OpenRtbJsonExtWriter<OpenRtbExt.Imp
     @Override
     protected void write(ImpExt impExt, JsonGenerator gen) throws IOException {
         if (impExt.hasAe()) {
-            gen.writeNumberField("ae", impExt.getAe().getNumber());
+            gen.writeNumberField("ae", impExt.getAe());
         }
     }
 }

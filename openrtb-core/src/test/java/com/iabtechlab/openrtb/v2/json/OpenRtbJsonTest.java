@@ -703,7 +703,7 @@ public class OpenRtbJsonTest {
                 .setMincpmpersec(45.0)
                 .setExtension(TestExt.testAudio, OpenRtbJsonFactoryHelper.test1))
                 .setExtension(OpenRtbExt.imp,
-                              ImpExt.newBuilder().setAe(ImpExt.AuctionEnvironment.SERVER_SIDE_AUCTION).build()))
+                              ImpExt.newBuilder().setAe(ImpExt.AuctionEnvironment.SERVER_SIDE_AUCTION_VALUE).build()))
         .addImp(Imp.newBuilder()
             .setId("imp4")
             .setNative(Native.newBuilder()
@@ -714,7 +714,8 @@ public class OpenRtbJsonTest {
                 .setExtension(TestExt.testNative, test1))
             .setExtension(TestExt.testImp, test1)
             .setExtension(OpenRtbExt.imp,
-                          ImpExt.newBuilder().setAe(ImpExt.AuctionEnvironment.ON_DEVICE_INTEREST_GROUP_AUCTION).build()))
+                          ImpExt.newBuilder().setAe(ImpExt.AuctionEnvironment.ON_DEVICE_INTEREST_GROUP_AUCTION_VALUE)
+                                .build()))
         .setDevice(Device.newBuilder()
             .setUa("Chrome")
             .setGeo(Geo.newBuilder()
