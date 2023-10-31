@@ -733,6 +733,7 @@ public class OpenRtbJsonTest {
                 .setLastfix(15)
                 .setIpservice(LocationService.IP2LOCATION.getNumber())
                 .setExtension(TestExt.testGeo, test1))
+                .setExtension(OpenRtbExt.device, OpenRtbExt.DeviceExt.newBuilder().setCdep("cdepValue").build())
             .setDnt(false)
             .setLmt(false)
             .setIp("192.168.1.0")
