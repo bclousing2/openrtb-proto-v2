@@ -117,6 +117,7 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test1Reader<>(TestExt.testBrandVersion), BrandVersion.Builder.class)
         .register(new Test1Reader<>(TestExt.testUserAgent), UserAgent.Builder.class)
         .register(new OpenRtbRegsExtJsonReader(), OpenRtb.BidRequest.Regs.Builder.class)
+        .register(new OpenRtbImpExtJsonReader(), OpenRtb.BidRequest.Imp.Builder.class)
         .register(new OpenRtbDeviceExtJsonReader(), OpenRtb.BidRequest.Device.Builder.class)
         // Writers
         .register(new Test1Writer(), Test1.class, BidRequest.class)
@@ -152,6 +153,7 @@ class OpenRtbJsonFactoryHelper {
         .register(new Test1Writer(), Test1.class, BrandVersion.class)
         .register(new Test1Writer(), Test1.class, UserAgent.class)
         .register(new OpenRtbRegsExtJsonWriter(), OpenRtbExt.RegsExt.class, OpenRtb.BidRequest.Regs.class)
+        .register(new OpenRtbImpExtJsonWriter(), OpenRtbExt.ImpExt.class, OpenRtb.BidRequest.Imp.class);
         .register(new OpenRtbDeviceExtJsonWriter(), OpenRtbExt.DeviceExt.class, OpenRtb.BidRequest.Device.class);
   }
 
