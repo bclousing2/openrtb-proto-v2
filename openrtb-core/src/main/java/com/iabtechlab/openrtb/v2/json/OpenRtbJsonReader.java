@@ -54,7 +54,11 @@ import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Publisher;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Regs;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Site;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source.SupplyChain;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.Source.SupplyChain.SupplyChainNode;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User.EID;
+import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.User.EID.UID;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidRequest.UserAgent;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidResponse;
 import com.iabtechlab.openrtb.v2.OpenRtb.BidResponse.SeatBid;
@@ -234,8 +238,76 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
       case "pchain":
         source.setPchain(par.getText());
         break;
+      case "schain":
+        source.setSchain(readSupplyChain(par));
+        break;
       default:
         readOther(source, par, fieldName);
+    }
+  }
+
+  public final SupplyChain.Builder readSupplyChain(JsonParser par) throws IOException {
+    SupplyChain.Builder supplyChain = SupplyChain.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readSupplyChainField(par, supplyChain, fieldName);
+      }
+    }
+    return supplyChain;
+  }
+
+  protected void readSupplyChainField(JsonParser par, SupplyChain.Builder supplyChain, String fieldName) throws IOException {
+    switch (fieldName) {
+      case "complete":
+        supplyChain.setComplete(par.getValueAsBoolean());
+        break;
+      case "ver":
+        supplyChain.setVer(par.getText());
+        break;
+      case "nodes":
+        for (startArray(par); endArray(par); par.nextToken()) {
+          supplyChain.addNodes(readSupplyChainNode(par));
+        }
+        break;
+      default:
+        readOther(supplyChain, par, fieldName);
+    }
+  }
+
+  public final SupplyChainNode.Builder readSupplyChainNode(JsonParser par) throws IOException {
+    final SupplyChainNode.Builder supplyChainNode = SupplyChainNode.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readSupplyChainNodeField(par, supplyChainNode, fieldName);
+      }
+    }
+    return supplyChainNode;
+  }
+
+  protected void readSupplyChainNodeField(JsonParser par, SupplyChainNode.Builder supplyChainNode, String fieldName) throws IOException {
+    switch (fieldName) {
+      case "asi":
+        supplyChainNode.setAsi(par.getText());
+        break;
+      case "sid":
+        supplyChainNode.setSid(par.getText());
+        break;
+      case "rid":
+        supplyChainNode.setRid(par.getText());
+        break;
+      case "name":
+        supplyChainNode.setName(par.getText());
+        break;
+      case "domain":
+        supplyChainNode.setDomain(par.getText());
+        break;
+      case "hp":
+        supplyChainNode.setHp(par.getValueAsBoolean());
+        break;
+      default:
+        readOther(supplyChainNode, par, fieldName);
     }
   }
 
@@ -1457,8 +1529,63 @@ public class OpenRtbJsonReader extends AbstractOpenRtbJsonReader {
       case "consent":
         user.setConsent(par.getText());
         break;
+      case "eids":
+        for (startArray(par); endArray(par); par.nextToken()) {
+          user.addEids(readEid(par));
+        }
+        break;
       default:
         readOther(user, par, fieldName);
+    }
+  }
+
+  public final EID.Builder readEid(JsonParser par) throws IOException {
+    EID.Builder eid = EID.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readEidField(par, eid, fieldName);
+      }
+    }
+    return eid;
+  }
+
+  protected void readEidField(JsonParser par, EID.Builder eid, String fieldName) throws IOException {
+    switch (fieldName) {
+      case "source":
+        eid.setSource(par.getText());
+        break;
+      case "uids":
+        for (startArray(par); endArray(par); par.nextToken()) {
+          eid.addUids(readUid(par));
+        }
+        break;
+      default:
+        readOther(eid, par, fieldName);
+    }
+  }
+
+  public final UID.Builder readUid(JsonParser par) throws IOException {
+    UID.Builder uid = UID.newBuilder();
+    for (startObject(par); endObject(par); par.nextToken()) {
+      String fieldName = getCurrentName(par);
+      if (par.nextToken() != JsonToken.VALUE_NULL) {
+        readUidField(par, uid, fieldName);
+      }
+    }
+    return uid;
+  }
+
+  protected void readUidField(JsonParser par, UID.Builder uid, String fieldName) throws IOException {
+    switch (fieldName) {
+      case "id":
+        uid.setId(par.getText());
+        break;
+      case "atype":
+        uid.setAtype(par.getIntValue());
+        break;
+      default:
+        readOther(uid, par, fieldName);
     }
   }
 
