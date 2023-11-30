@@ -163,6 +163,19 @@ message SKAdNetworkRequest {
 message ImpExt {
   // Publisher's SKAdNetwork information.
   optional SKAdNetworkRequest skadn = 1;
+
+  // To differentiate between impression opportunities
+  // that support Protected Audience API on-device auction from
+  // those that only support traditional server-side exchange auction
+  enum AuctionEnvironment {
+    // Traditional server-side auctions
+    SERVER_SIDE_AUCTION = 0;
+    // Requests with Protected Audience API support,
+    // in which a contextual auction runs on the exchange's servers
+    // and the interest group bidding and the final auction runs in the browser
+    ON_DEVICE_INTEREST_GROUP_AUCTION = 1;
+  }
+  optional int32 ae = 2 [default = 0];
 }
 
 extend com.iabtechlab.openrtb.v2.BidRequest.Imp {
@@ -185,6 +198,10 @@ message DeviceExt {
   // IDFV of the device in that publisher. Listed as ifv to match ifa field
   // format.
   optional string ifv = 2;
+
+  // Chrome-facilitated cookie deprecation testing label as received from Chrome.
+  // https://developer.chrome.com/en/docs/privacy-sandbox/chrome-testing/
+  optional string cdep = 3;
 }
 
 extend com.iabtechlab.openrtb.v2.BidRequest.Device {

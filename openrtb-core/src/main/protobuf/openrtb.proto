@@ -52,6 +52,11 @@ message BidRequest {
     // Details via an App object (Section 3.2.7) about the publisher's app
     // (non-browser applications). Only applicable and recommended for apps.
     App app = 4;
+
+    // This object should be included if the ad supported content is a Digital
+    // Out-Of-Home screen. A bid request with a DOOH object must not contain a
+    // site or app object.
+    Dooh dooh = 22;
   }
 
   // Details via a Device object (Section 3.2.11) about the user's
@@ -96,6 +101,10 @@ message BidRequest {
   // Blocked advertiser categories using the IAB content categories.
   repeated string bcat = 12;
 
+  // The taxonomy in use for bcat.
+  // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+  optional int32 cattax = 21 [default = 1];
+
   // Block list of advertisers by their domains (e.g., "ford.com").
   repeated string badv = 13;
 
@@ -122,6 +131,12 @@ message BidRequest {
   // advised to consider language attribute in the Device and/or
   // Content objects if available.
   repeated string wlang = 18;
+
+  // Allowed list of languages for creatives using IETF BCP 47I. Omission
+  // implies no specific restrictions, but buyers would be advised to consider
+  // language attribute in the Device and/or Content objects if available. Only
+  // one of wlang or wlangb should be present.
+  repeated string wlangb = 20;
 
   // A Source object (Section 3.2.2) that provides data about the
   // inventory source and which entity makes the final decision.
@@ -306,6 +321,20 @@ message BidRequest {
     // Array of exchange-specific names of supported iframe busters.
     repeated string iframebuster = 10;
 
+    // Indicates whether the user receives a reward for viewing the ad, where 0
+    // = no, 1 = yes. Typically video ad implementations allow users to read an
+    // additional news article for free, receive an extra life in a game, or get
+    // a sponsored ad-free music session. The reward is typically distributed
+    // after the video ad is completed.
+    optional bool rwdd = 18 [default = false];
+
+    // Indicates if server-side ad insertion (e.g., stitching an ad into an
+    // audio or video stream) is in use and the impact of this on asset and
+    // tracker retrieval, where 0 = status unknown, 1 = all client-side (i.e.,
+    // not server-side), 2 = assets stitched server-side but tracking pixels
+    // fired client-side, 3 = all server-side.
+    optional int32 ssai = 19 [default = 0];
+
     // A Pmp object (Section 3.2.17) containing any private marketplace deals
     // in effect for this impression.
     optional Pmp pmp = 11;
@@ -320,6 +349,19 @@ message BidRequest {
 
     // An array of Metric object (Section 3.2.5).
     repeated Metric metric = 17;
+
+    // A means of passing a multiplier in the bid request, representing the
+    // total quantity of impressions for adverts that display to more than one
+    // person.
+    optional Qty qty = 20;
+
+    // Timestamp when the item is estimated to be fulfilled (e.g. when a DOOH
+    // impression will be displayed) in Unix format (i.e., milliseconds since
+    // the epoch).
+    optional double dt = 21;
+
+    // Details about ad slots being refreshed automatically.
+    optional Refresh refresh = 22;
 
     // Extensions.
     extensions 100 to 9999;
@@ -526,6 +568,20 @@ message BidRequest {
       // RECOMMENDED by the OpenRTB specification.
       optional int32 startdelay = 8;
 
+      // Indicates the maximum number of ads that may be served into a
+      // “dynamic” video ad pod (where the precise number of ads is not
+      // predetermined by the seller).
+      optional int32 maxseq = 28;
+
+      // Indicates the total amount of time in seconds that advertisers may
+      // fill for a “dynamic” video ad pod (See Section 7.6 for more details),
+      // or the dynamic portion of a “hybrid” ad pod. This field is required
+      // only for the dynamic portion(s) of video ad pods. This field refers to
+      // the length of the entire ad break, whereas
+      // minduration/maxduration/rqddurs are constraints relating to the slots
+      // that make up the pod.
+      optional int32 poddur = 29;
+
       // Indicates if the player will allow the video to be skipped,
       // where 0 = no, 1 = yes.
       // If a bidder sends markup/creative that is itself skippable, the
@@ -544,7 +600,16 @@ message BidRequest {
       // If multiple ad impressions are offered in the same bid request,
       // the sequence number will allow for the coordinated delivery of
       // multiple creatives.
-      optional int32 sequence = 9 [default = 1];
+      optional int32 sequence = 9 [default = 1, deprecated = true];
+
+      // For video ad pods, this value indicates that the seller can guarantee
+      // delivery against the indicated slot position in the pod.
+      optional int32 slotinpod = 33 [default = 0];
+
+      // Minimum CPM per second. This is a price floor for the "dynamic"
+      // portion of a video ad pod, relative to the duration of bids an
+      // advertiser may submit.
+      optional double mincpmpersec = 34;
 
       // Blocked creative attributes.
       // Refer to enum com.iabtechlab.adcom.v1.enums.Creative.Attribute for generic values.
@@ -601,9 +666,30 @@ message BidRequest {
       // Refer to enum com.iabtechlab.adcom.v1.CompanionType for generic values.
       repeated int32 companiontype = 20 [packed = true];
 
+      // Unique identifier indicating that an impression opportunity belongs to
+      // a video ad pod. If multiple impression opportunities within a bid
+      // request share the same podid, this indicates that those impression
+      // opportunities belong to the same video ad pod.
+      optional string podid = 30;
+
+      // The sequence (position) of the video ad pod within a content stream.
+      optional int32 podseq = 31 [default = 0];
+
+      // Precise acceptable durations for video creatives in seconds. This
+      // field specifically targets the Live TV use case where non-exact ad
+      // durations would result in undesirable ‘dead air’. This field is
+      // mutually exclusive with minduration and maxduration; if rqddurs is
+      // specified, minduration and maxduration must not be specified and vice
+      // versa.
+      repeated int32 rqddurs = 32 [packed = true];
+
       // Placement type for the impression.
       // Refer to enum com.iabtechlab.adcom.v1.VideoPlacementSubtype for generic values.
-      optional int32 placement = 26;
+      optional int32 placement = 26 [deprecated = true];
+
+      // Video placement type for the impression.
+      // Refer to enum com.iabtechlab.adcom.v1.VideoPlcmtSubtype for generic values.
+      optional int32 plcmt = 35;
 
       // The event that causes playback to end.
       // Refer to enum com.iabtechlab.adcom.v1.PlaybackCessationMode for generic values.
@@ -645,6 +731,15 @@ message BidRequest {
       // RECOMMENDED by the OpenRTB specification.
       optional int32 maxduration = 3;
 
+      // Indicates the total amount of time in seconds that advertisers may
+      // fill for a “dynamic” video ad pod (See Section 7.6 for more details),
+      // or the dynamic portion of a “hybrid” ad pod. This field is required
+      // only for the dynamic portion(s) of video ad pods. This field refers to
+      // the length of the entire ad break, whereas
+      // minduration/maxduration/rqddurs are constraints relating to the slots
+      // that make up the pod.
+      optional int32 poddur = 25;
+
       // Array of supported audio protocols.
       // Refer to enum com.iabtechlab.adcom.v1.Creative.AudioVideoType for generic values.
       // RECOMMENDED by the OpenRTB specification.
@@ -656,10 +751,36 @@ message BidRequest {
       // RECOMMENDED by the OpenRTB specification.
       optional int32 startdelay = 5;
 
+      // Precise acceptable durations for audio creatives in seconds. This
+      // field specifically targets the live audio/radio use case where
+      // non-exact ad durations would result in undesirable 'dead air'. This
+      // field is mutually exclusive with minduraiton and maxduration; if
+      // rqddurs is specified, minduraiton and maxduration must not be
+      // specified and vice versa.
+      repeated int32 rqddurs = 26 [packed = true];
+
+      // Unique identifier indicating that an impression opportunity belongs to
+      // an audio ad pod. If multiple impression opportunities within a bid
+      // request share the same podid, this indicates that those impression
+      // opportunities belong to the same audio ad pod.
+      optional string podid = 27;
+
+      // The sequence (position) of the audio ad pod within a content stream.
+      optional int32 podseq = 28 [default = 0];
+
       // If multiple ad impressions are offered in the same bid request,
       // the sequence number will allow for the coordinated delivery of
       // multiple creatives.
-      optional int32 sequence = 6 [default = 1];
+      optional int32 sequence = 6 [default = 1, deprecated = true];
+
+      // For audio ad pods, this value indicates that the seller can guarantee
+      // delivery against the indicated slot position in the pod.
+      optional int32 slotinpod = 29 [default = 0];
+
+      // Minimum CPM per second. This is a price floor for the “dynamic”
+      // portion of an audio ad pod, relative to the duration of bids an
+      // advertiser may submit.
+      optional double mincpmpersec = 30;
 
       // Blocked creative attributes.
       // Refer to enum com.iabtechlab.adcom.v1.enums.Creative.Attribute for generic values.
@@ -765,6 +886,60 @@ message BidRequest {
       extensions 100 to 9999;
     }
 
+    // A programmatic impression is often referred to as a ‘spot’ in digital
+    // out-of-home and CTV, with an impression being a unique member of the
+    // audience viewing it. Therefore, a standard means of passing a multiplier
+    // in the bid request, representing the total quantity of impressions, is
+    // required. This object includes the impression multiplier, and describes
+    // the source of the multiplier value.
+    message Qty {
+      // The quantity of billable events which will be deemed to have occurred if
+      // this item is purchased. For example, a DOOH opportunity may be
+      // considered to be 14.2 impressions. Equivalent to qtyflt in OpenRTB 3.0.
+      optional double multiplier = 1;
+
+      // The source type of the quantity measurement, ie. publisher.
+      // RECOMMENDED by the OpenRTB specification.
+      optional int32 sourcetype = 2;
+
+      // The top level business domain name of the measurement vendor providing
+      // the quantity measurement.
+      // REQUIRED by the OpenRTB specification if sourcetype is equal to 1.
+      optional string vendor = 3;
+
+      // Placeholder for vendor specific extensions to this object.
+      extensions 100 to 9999;
+    }
+
+    message Refresh {
+      // A RefSettings object describing the mechanics of how an ad placement
+      // automatically refreshes.
+      repeated RefSettings refsettings = 1;
+
+      // The number of times this ad slot had been refreshed since last page
+      // load.
+      optional int32 count = 2;
+
+      // Placeholder for vendor specific extensions to this object.
+      extensions 100 to 9999;
+
+      // Information on how often and what triggers an ad slot being refreshed.
+      message RefSettings {
+        // The type of the declared auto refresh.
+        optional int32 reftype = 1 [default = 0];
+
+        // The minimum refresh interval in seconds. This applies to all refresh
+        // types. This is the (uninterrupted) time the ad creative will be
+        // rendered before refreshing to the next creative. If the field is
+        // absent, the exposure time is unknown. This field does not account for
+        // viewability or external factors such as a user leaving a page.
+        optional int32 minint = 2;
+
+        // Placeholder for vendor specific extensions to this object.
+        extensions 100 to 9999;
+      }
+    }
+
     // OpenRTB 2.2: This object is the private marketplace container for
     // direct deals between buyers and sellers that may pertain to this
     // impression. The actual deals are represented as a collection of
@@ -838,6 +1013,10 @@ message BidRequest {
     // For example, "foo.com".
     optional string domain = 3;
 
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 16 [default = 1];
+
     // Array of IAB content categories of the site.
     repeated string cat = 4;
 
@@ -900,6 +1079,10 @@ message BidRequest {
     // Domain of the application. For example, "mygame.foo.com".
     optional string domain = 3;
 
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 17 [default = 1];
+
     // Array of IAB content categories of the app.
     repeated string cat = 4;
 
@@ -943,6 +1126,41 @@ message BidRequest {
     extensions 100 to 9999;
   }
 
+  // This object should be included if the ad supported content is a Digital
+  // Out-Of-Home screen. A bid request with a DOOH object must not contain a
+  // site or app object. At a minimum, it is useful to provide id and/or
+  // venuetypeid, but this is not strictly required.
+  message Dooh {
+    // Exchange provided id for a placement or logical grouping of placements.
+    optional string id = 1;
+
+    // Name of the DOOH placement.
+    optional string name = 2;
+
+    // The type of out-of-home venue. The taxonomy to be used is defined by the
+    // venuetax field. If no venuetax field is supplied, The OpenOOH Venue
+    // Taxonomy is assumed.
+    repeated string venuetype = 3;
+
+    // The venue taxonomy in use.
+    optional int32 venuetypetax = 4 [default = 1];
+
+    // Details about the publisher of the placement.
+    optional Publisher publisher = 5;
+
+    // Domain of the inventory owner (e.g., "mysite.foo.com").
+    optional string domain = 6;
+
+    // Comma separated list of keywords about the DOOH placement.
+    optional string keywords = 7;
+
+    // Details about the Content within the DOOH placement.
+    optional Content content = 8;
+
+    // Placeholder for vendor specific extensions to this object.
+    extensions 100 to 9999;
+  }
+
   // OpenRTB 2.0: This object describes the publisher of the media in which
   // the ad will be displayed. The publisher is typically the seller
   // in an OpenRTB transaction.
@@ -952,6 +1170,10 @@ message BidRequest {
 
     // Publisher name (may be aliased at publisher's request).
     optional string name = 2;
+
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 5 [default = 1];
 
     // Array of IAB content categories that describe the publisher.
     repeated string cat = 3;
@@ -1009,6 +1231,10 @@ message BidRequest {
     // URL of the content, for buy-side contextualization or review.
     optional string url = 6;
 
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 27 [default = 1];
+
     // Array of IAB content categories that describe the content.
     repeated string cat = 7;
 
@@ -1064,12 +1290,25 @@ message BidRequest {
     // Content language using ISO-639-1-alpha-2.
     optional string language = 19;
 
+    // Content language using IETF BCP 47.
+    // Only one of language or langb should be present.
+    optional string langb = 29;
+
     // Additional content data. Each Data object represents a different
     // data source.
-    repeated Data data = 26;
+    repeated Data data = 28;
+
+    // Details about the network the content is on.
+    optional Network network = 30;
+
+    // Details about the channel the content is on.
+    optional Channel channel = 31;
 
     // Extensions.
     extensions 100 to 9999;
+
+    // Retired fields.
+    reserved 26;
   }
 
   // OpenRTB 2.0: This object defines the producer of the content in which
@@ -1084,11 +1323,63 @@ message BidRequest {
     // Content producer or originator name (e.g., "Warner Bros").
     optional string name = 2;
 
+    // The taxonomy in use.
+    // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+    optional int32 cattax = 5 [default = 1];
+
     // Array of IAB content categories that describe the content producer.
     repeated string cat = 3;
 
     // Highest level domain of the content producer (e.g., "producer.com").
     optional string domain = 4;
+
+    // Extensions.
+    extensions 100 to 9999;
+  }
+
+  // This object describes the network an ad will be displayed on. A Network is
+  // defined as the parent entity of the Channel object’s entity for the
+  // purposes of organizing Channels. Examples are companies that own and/or
+  // license a collection of content channels (Viacom, Discovery, CBS,
+  // WarnerMedia, Turner and others), or studio that creates such content and
+  // self-distributes content. Name is a human-readable field while domain and
+  // id can be used for reporting and targeting purposes.
+  message Network {
+    // A unique identifier assigned by the publisher. This may not be a unique
+    // identifier across all supply sources.
+    optional string id = 1;
+
+    // Network the content is on (e.g., a TV network like "ABC").
+    optional string name = 2;
+
+    // The primary domain of the network (e.g. "abc.com" in the case of the
+    // network ABC). It is recommended to include the top private domain (PSL+1)
+    // for DSP targeting normalization purposes.
+    optional string domain = 3;
+
+    // Extensions.
+    extensions 100 to 9999;
+  }
+
+  // This object describes the channel an ad will be displayed on. A Channel is
+  // defined as the entity that curates a content library, or stream within a
+  // a brand name for viewers. Examples are specific view selectable ‘channels’
+  // within linear and streaming television (MTV, HGTV, CNN, BBC One, etc) or a
+  // specific stream of audio content commonly called ‘stations.’ Name is a
+  // human-readable field while domain and id can be used for reporting and
+  // targeting purposes.
+  message Channel {
+    // A unique identifier assigned by the publisher. This may not be a unique
+    // identifier across all supply sources.
+    optional string id = 1;
+
+    // Channel the content is on (e.g., a TV channel like "WABC-TV").
+    optional string name = 2;
+
+    // The primary domain of the channel (e.g. "abc7ny.com" in the case of the
+    // local channel WABC-TV). It is recommended to include the top private
+    // domain (PSL+1) for DSP targeting normalization purposes.
+    optional string domain = 3;
 
     // Extensions.
     extensions 100 to 9999;
@@ -1138,6 +1429,9 @@ message BidRequest {
 
     // Browser language using ISO-639-1-alpha-2.
     optional string language = 11;
+
+    // Browser language using IETF BCP 47. Only one of language or langb should be present.
+    optional string langb = 32;
 
     // Device make (e.g., "Apple").
     optional string make = 12;
@@ -1395,7 +1689,7 @@ message BidRequest {
 
     // When GDPR regulations are in effect this attribute contains the
     // Transparency and Consent Framework’s Consent String data structure.
-    optional string consent = 9;
+    optional string consent = 10;
 
     // Extended identifiers support in the OpenRTB specification allows buyers
     // to use audience data in real-time bidding.  The exchange should ensure
@@ -1634,6 +1928,10 @@ message BidResponse {
       // Creative ID to assist with ad quality checking.
       optional string crid = 10;
 
+      // The taxonomy in use.
+      // Refer to the enum com.iabtechlab.adcom.v1.enums.CategoryTaxonomy for values.
+      optional int32 cattax = 30 [default = 1];
+
       // IAB content categories of the creative.
       repeated string cat = 15;
 
@@ -1641,9 +1939,14 @@ message BidResponse {
       // Refer to enum com.iabtechlab.adcom.v1.enums.Creative.Attribute for generic values.
       repeated int32 attr = 11 [packed = true];
 
+      // List of supported APIs for the markup. If an API is not explicitly
+      // listed, it is assumed to be unsupported.
+      // Refer to enum com.iabtechlab.adcom.v1.enums.APIFramework for generic values.
+      repeated int32 apis = 31 [packed = true];
+
       // API required by the markup if applicable.
       // Refer to enum com.iabtechlab.adcom.v1.enums.APIFramework for generic values.
-      optional int32 api = 18;
+      optional int32 api = 18 [deprecated = true];
 
       // Video response protocol of the markup if applicable.
       // Refer to enum com.iabtechlab.adcom.v1.Creative.AudioVideoType for generic values.
@@ -1692,6 +1995,10 @@ message BidResponse {
       // linguistic content (e.g., a banner with just a company logo).
       optional string language = 25;
 
+      // Language of the creative using IETF BCP 47. Only one of language or
+      // langb should be present.
+      optional string langb = 29;
+
       // Relative width of the creative when expressing size as a ratio.
       // Required for Flex Ads.
       optional int32 wratio = 26;
@@ -1699,6 +2006,18 @@ message BidResponse {
       // Relative height of the creative when expressing size as a ratio.
       // Required for Flex Ads.
       optional int32 hratio = 27;
+
+      // Duration of the video or audio creative in seconds.
+      optional int32 dur = 32;
+
+      // Type of the creative markup so that it can properly be associated with
+      // the right sub-object of the BidRequest.Imp.
+      optional int32 mtype = 33;
+
+      // Indicates that the bid response is only eligible for a specific
+      // position within a video or audio ad pod (e.g. first position, last
+      // position, or any).
+      optional int32 slotinpod = 28 [default = 0];
 
       // Extensions.
       extensions 100 to 9999;
