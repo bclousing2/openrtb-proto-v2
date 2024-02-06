@@ -18,6 +18,8 @@ package com.iabtechlab.openrtb.v2;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// BRIT-test
+
 // Ad Exchange extensions for the Regs object.
 message RegsExt {
   // Callers should fill this field solely based on whether the impression
